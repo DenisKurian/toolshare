@@ -127,7 +127,7 @@ def HomePage(request):
             "tools": tools
             
         }
-        return render(request,"User/HomePage.html", context)
+    return render(request,"User/HomePage.html", context)
 
 def Editprofile(request):
     if "uid" not in request.session:
