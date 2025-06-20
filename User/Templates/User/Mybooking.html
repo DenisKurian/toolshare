@@ -1,0 +1,164 @@
+{% extends 'User/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+.action-container {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.action-buttons {
+    margin-top: 10px;
+}
+
+.button {
+    display:inline-flex;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+}
+.button--reject{
+    background-color: #dc3545;
+    display:inline-flex;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+.button--reject:hover {
+    transform: scale(1.05);
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.button--secondary {
+    background-color: #28a745;
+}
+
+.button--secondary:hover {
+    background-color: #218838;
+}
+
+.card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    backdrop-filter: blur(8px);
+}
+</style>
+
+
+
+<section class="toolList">
+    <a id="back-button" class="back-button">&#x2B05; Back</a>
+    <div class="container">
+        <h3 class="devInfo__title">My Bookings : </h3>
+        <p class="tool__info">Here you can see your bookings</p>
+        <div class="grid grid--three">
+           
+            {% for booking in bookings %}
+            <div class="column">
+                <div class="card project">
+                    <a href="{% url 'User:Rentdetails' booking.data.id %}" class="tool">
+                        
+                            {% if booking.data.tool.gallery_file %}
+                              <img class="project__thumbnail parallax" src="{{ booking.data.tool.gallery_file.url }}" alt="project thumbnail" />
+                            {% else %}
+                                <img class="project__thumbnail parallax" src="{% static 'staticfiles/images/default.jpg' %}" alt="project thumbnail" />
+                            {% endif %}
+                        <div class="card__body">
+                            <h3 class="tool__name">{{ forloop.counter }}. {{ booking.data.tool.tool_name }}</h3>
+                            <p class="tool__info">{{ booking.data.tool.category.category_name }}</p>
+                            <p class="tool__info">Date: {{ booking.data.rent_tool_date }}</p>
+                            <p class="tool__info">From: {{ booking.data.rent_tool_fromdate }} to {{ i.rent_tool_todate }}</p>
+                            <p class="tool__price">Price: {{ booking.data.rent_tool_price }}</p>
+                            <p class="owner_contact">Quantity: {{booking.data.rent_tool_qty}}</p>
+                            <p class="owner_contact">Owner: {{ booking.data.tool.user.user_name }}</p>
+                            
+                            <div class="col-sm-4 text-center">
+                                <span class="project--rating">
+                                    {% if booking.data.rent_tool_status == 1 %}
+                                Payment Completed <a class="button" href="{% url 'User:rating' booking.data.tool.id%}">&#11088; Rate</a>  <a class="button" href="{% url 'User:chatpage' booking.data.tool.user.id %}">&#128172; Chat</a>
+                                {% if booking.fromdate > tdy %}
+                               
+                                 <a class="button--reject" href="#" onclick="cancelBooking('{{booking.data.id}}')">Cancel Booking</a>
+                                 {% else %}
+                                | <td>Cancellation not possible</td>
+                                {% endif %}
+                                {% elif booking.data.rent_tool_status == 2 %}
+                                Returned  
+                                {% elif booking.data.rent_tool_status == 3 %}
+                                Booking Cancelled 
+                                {% elif booking.data.rent_tool_status == 4 %}
+                                Damage is reported.
+                                Detailed enquiry is in progress.
+                    
+                                {% elif booking.data.rent_tool_status == 5 %}
+                                No damage reported.
+                                Deposit of Rs{{booking.data.tool.tool_deposit}} will be refunded to your account.
+                    
+                    {% else %}
+                    Payment Not Completed  <a class="button--secondary" href="{% url 'User:Payment' booking.data.id %}">Payment</a></td>
+                    {% endif %}
+                {% if booking.data.rent_tool_status == 3 %}
+                
+                    Cancellation fee for this booking is {{booking.data.cancel_fee}}.
+                     The rest will be refunded to your account.
+                
+                {% elif booking.data.rent_tool_status == 2 %}
+                
+                    Late fee for this booking is {{booking.data.late_fee}}.
+                    This amount is to be paid to the owner of the tool.
+                
+                {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No bookings found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<script>
+    document.getElementById('back-button').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    function cancelBooking(id) {
+        var con = confirm("Are you sure you want to cancel this booking?");
+        if (con == false) {
+            return false;
+        }
+        else {
+            var ur = "{% url 'User:ajaxcancelbooking' %}";
+            $.ajax({
+                url: ur,
+                data: { id: id },
+                success: function (data) {
+                    alert(data.msg);
+                    window.location = "{% url 'User:Mybooking' %}";
+                },
+            });
+        }
+    }
+</script>
+{% endblock %}

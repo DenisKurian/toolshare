@@ -1,0 +1,319 @@
+{% extends 'User/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    * {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+max-width: 1000px;
+position: relative;
+margin: auto;
+}
+.delete-button {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: #c9302c;
+}
+/* Hide the images by default */
+.mySlides {
+display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+cursor: pointer;
+position: absolute;
+top: 50%;
+width: auto;
+margin-top: -22px;
+padding: 16px;
+color: white;
+font-weight: bold;
+font-size: 18px;
+transition: 0.6s ease;
+border-radius: 0 3px 3px 0;
+user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+right: 0;
+border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+color: #f2f2f2;
+font-size: 15px;
+padding: 8px 12px;
+position: absolute;
+bottom: 8px;
+width: 100%;
+text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+color: #f2f2f2;
+font-size: 12px;
+padding: 8px 12px;
+position: absolute;
+top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+cursor: pointer;
+height: 15px;
+width: 15px;
+margin: 0 2px;
+background-color: #bbb;
+border-radius: 50%;
+display: inline-block;
+transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+animation-name: fade;
+animation-duration: 1.5s;
+}
+
+@keyframes fade {
+from {opacity: .4}
+to {opacity: 1}
+}
+
+  </style>
+<style>
+.action-container {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.action-buttons {
+    margin-top: 10px;
+}
+.button {
+    display:inline-flex;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+}
+body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    form {
+        background-color: transparent;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        backdrop-filter: blur(8px);
+        
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        color: unset;
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+        
+        
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .btn-tool {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: none;
+        background-color: #28a745;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-tool:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+    .action-links a {
+        text-decoration: none;
+        color: #007bff;
+        margin-right: 10px;
+    }
+    .action-links a:hover {
+        text-decoration: underline;
+    }
+    .card {
+
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: transparent;
+        backdrop-filter: blur(8px);
+        height: auto;
+    }
+    .gallery-slider {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .gallery-image:hover {
+            transform: scale(1.05);
+        }
+.tool__thumbnail {
+width: 100%;
+height: auto; /* Maintain aspect ratio */
+object-fit: scale; /* Ensure the image covers the entire area */
+display: block; /* Remove any inline spacing */
+
+}
+.tool__name {
+font-size: 3.0rem;
+margin: 0.5rem 0;
+}
+</style>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gallery</title>
+    </head>
+<body>
+    <a href="{% url 'User:edittool' tool.id %}" class="btn-tool">&#10799; Close Gallery</a> 
+    <h1>Gallery</h1>
+    
+    <div class="container">
+        
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="auth__form" border="2">
+            <tr>
+                <td>select File</td>
+                <td><input type="file" name="btnfile"></td>
+            </tr>
+
+            <tr>
+                <td align="center" colspan="2">
+                 <input class="btn-tool" type="submit" name="btnsubmit" value="Submit">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div class="slideshow-container">
+        {% for image in gallery_images %}
+
+        <!-- Full-width images with number and caption text -->
+        <div class="mySlides fade">
+          <div class="numbertext">{{ forloop.counter }} / {{ gallery_images|length }}</div>
+          <img src="{{ image.gallery_image.url }}" style="width:100%">
+          <div class="text">{{ forloop.counter }}</div>
+          <form method="post" action="{% url 'User:DeleteImage' image.id %}">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Delete</button>
+        </form>
+
+        </div>
+        {% endfor %}
+      
+        
+      
+        
+      
+        <!-- Next and previous buttons -->
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+      </div>
+      <br>
+      
+      <!-- The dots/circles -->
+      <div style="text-align:center">
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+      </div>
+    </div>
+</body>
+</html>
+<script>
+    let slideIndex = 1;
+  showSlides(slideIndex);
+  
+  // Next/previous controls
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+  
+  // Thumbnail image controls
+  function currentSlide(n) {
+    showSlides(slideIndex = n);
+  }
+  
+  function showSlides(n) {
+    let i;
+    let slides = document.getElementsByClassName("mySlides");
+    let dots = document.getElementsByClassName("dot");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].className += " active";
+  }
+  </script>
+
+{% endblock %}

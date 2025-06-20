@@ -1,0 +1,200 @@
+{% extends 'User/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .card {
+    /* margin-top: calc(60px + 10px); Adjust this to account for the navbar height (e.g., 60px) */
+    margin-top: 400px;/* Reduce the bottom margin to avoid overlapping the footer */
+    padding-top: 20px;
+   
+    position: relative;
+
+}
+
+.auth__header {
+    margin-top: 10px;
+}
+
+
+
+</style>
+    <div class="auth">
+        <div class="card">
+            <div class="auth__header text-center">
+                <a href="/">
+                    <img class="header__logo" src="{% static 'staticfiles/images/icon2.svg' %}" alt="icon" />
+                </a>
+                <h3>Account SignUp</h3>
+                <p>Create a new account</p>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data" class="form auth__form" onsubmit="validateForm(event)">
+                {% csrf_token %}
+                
+                <div class="form__field">
+                    <label for="formInput#name">Name: </label>
+                    <input
+                        class="input input--text"
+                        id="formInput#name"
+                        type="text"
+                        name="txtname"
+                        placeholder="Enter your name..."
+                        required
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#email">Email: </label>
+                    <input
+                        class="input input--text"
+                        id="formInput#email"
+                        type="email"
+                        name="txtemail"
+                        placeholder="Enter your email..."
+                        required
+                        autocomplete="off"
+                    />
+                </div>
+                
+                <div class="form__field">
+                    <label for="formInput#contact">Contact No: </label>
+                    <input
+                        class="input input--text"
+                        id="formInput#contact"
+                        type="text"
+                        name="txtcontactno"
+                        placeholder="Enter your contact number..."
+                        required
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div class="form__field">
+                    <label for="latitude">Latitude: </label>
+                    <input
+                        class="input input--text"
+                        id="latitude"
+                        type="text"
+                        name="latitude"
+                        placeholder="Enter your location..."
+                        required
+                        readonly
+                        
+                    />
+                </div>
+                <div class="form__field">
+                    <label for="longitude">Longtitude: </label>
+                    <input
+                        class="input input--text"
+                        id="longitude"
+                        type="text"
+                        name="longitude"
+                        placeholder="Enter your location..."
+                        required
+                        readonly
+                
+                    />
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#photo">Photo: </label>
+                    <input
+                        class="input input--file"
+                        id="formInput#photo"
+                        type="file"
+                        name="fphoto"
+                    />
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#proof">Proof: </label>
+                    <input
+                        class="input input--file"
+                        id="formInput#proof"
+                        type="file"
+                        name="fproof"
+                    />
+                </div>
+
+                <div class="form__field">
+                    <label for="formInput#password">Password: </label>
+                    <input
+                        class="input input--password"
+                        id="formInput#password"
+                        type="password"
+                        name="txtpassword"
+                        placeholder="••••••••"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                        title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters"
+                        required
+                        autocomplete="off"
+                    />
+                </div>
+
+                <div class="auth__actions">
+                    <input class="btn btn--sub btn--lg" type="submit" value="Register" />
+                </div>
+            </form>
+
+            <div class="auth__alternative">
+                <p>Already have an Account?</p>
+                <a href="{% url 'Guest:Login' %}">Log In</a>
+            
+            </div>
+        </div>
+    </div>
+
+    {% if msg %}
+    <script>
+        alert("{{ msg }}")
+    </script>
+    {% endif %}
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Location access denied. Please allow location access and refresh the page.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
+        function validateForm(event) {
+            let lat = document.getElementById("latitude").value;
+            let lon = document.getElementById("longitude").value;
+            if (lat === "" || lon === "") {
+                alert("We only accept your current location. Please allow location access.");
+                event.preventDefault(); // Prevent form submission
+            }
+        }
+
+        window.onload = function() {
+            alert("We only accept your current location for registration. Please make sure it is correct.");
+            getLocation();
+        };
+    </script>
+{% endblock %}

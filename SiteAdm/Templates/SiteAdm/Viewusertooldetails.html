@@ -1,0 +1,147 @@
+{% extends 'SiteAdm/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Tool Details</title>
+    <style>
+        /* General Styles */
+        
+        .tcontainer {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+       
+
+        /* Table Styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #3F4156;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .data-table th {
+            background-color: #3F4156;
+            color: white;
+        }
+
+        .data-table td {
+            background-color: #f5f5f5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .data-table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a id="back-button" class="back-button">&#x2B05; Back</a> 
+    <div class="container">
+        <h1>User Tools Listed</h1>
+        <form method="post">
+            {% csrf_token %}
+            <table class="data-table">
+                <tr>
+                    <th>SL No</th>
+                    <th>Tool Name</th>
+                    <th>Tool Details</th>
+                    <th>Price Per Day</th>
+                    <th>Quantity</th>
+                    <th>Category</th>
+                </tr>
+                {% for i in utool %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.tool_name}}</td>
+                    <td>{{i.tool_details}}</td>
+                    <td>{{i.tool_priceperday}}</td>
+                    <td>{{i.qty}}</td>
+                    <td>{{i.category.category_name}}</td>       
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+
+    <div class="container">
+        <h1>Tools Rented</h1>
+        <table class="data-table">
+            <tr>
+                <th>SL No</th>
+                <th>Tool Name</th>
+                <th>Tool Details</th>
+                <th>Price Per Day</th>
+                <th>Quantity</th>
+                <th>Rented From</th>
+                <th>Category</th>
+            </tr>
+            {% for i in urent %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.tool.tool_name}}</td>
+                <td>{{i.tool.tool_details}}</td>
+                <td>{{i.tool.tool_priceperday}}</td>
+                <td>{{i.tool.qty}}</td>
+                <td>{{i.tool.user.user_name}}</td>
+                <td>{{i.tool.category.category_name}}</td>       
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="container">
+        <h1>Tools Given for Rent</h1>
+        <table class="data-table">
+            <tr>
+                <th>SL No</th>
+                <th>Tool Name</th>
+                <th>Tool Details</th>
+                <th>Price Per Day</th>
+                <th>Quantity</th>
+                <th>Rented By</th>
+                <th>Category</th>
+            </tr>
+            {% for i in urental %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.tool.tool_name}}</td>
+                <td>{{i.tool.tool_details}}</td>
+                <td>{{i.tool.tool_priceperday}}</td>
+                <td>{{i.tool.qty}}</td>
+                <td>{{i.user.user_name}}</td>
+                <td>{{i.tool.category.category_name}}</td>       
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</body> 
+</html>
+<script>
+    document.getElementById('back-button').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'User\base.html' %}
+{% block content %}
+<div class="auth">
+    <div class="card">
+            <h3>Account Login</h3>
+            <p>Welcome Back!</p>
+  
+          <form method="post" class="form auth__form">
+            <!-- Input:Email -->
+            {% csrf_token %}
+            <div class="form__field">
+              <label for="formInput#text">Email: </label>
+              <input
+                class="input input--text"
+                id="formInput#text"
+                type="email"
+                name="txtemail"
+                placeholder="Enter your username..."
+                autocomplete="off"
+              />
+            </div>
+  
+            <!-- Input:Password -->
+            <div class="form__field">
+              <label for="formInput#password">Password: </label>
+              <input
+                class="input input--password"
+                id="formInput#passowrd"
+                type="password"
+                name="txtpassword"
+                placeholder="••••••••"
+                autocomplete="off"
+              />
+            </div>
+            <div class="auth__actions">
+              <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+              
+            </div>
+          </form>
+          <div class="auth__alternative">
+            <p>Don’t have an Account?</p>
+            <a href="{% url 'Guest:UserRegistration' %}">Sign Up</a>
+          </div>
+          </div>
+          </div>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+</script>
+{% endif %}
+{% endblock %}

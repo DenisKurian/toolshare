@@ -1,0 +1,466 @@
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- icon -->
+  <link rel="shortcut icon" href="{% static 'staticfiles/images/icon.svg' %}"type="image/svg+xml" />
+  <link rel="stylesheet" href="https://cdn.iconmonstr.com/1.3.0/css/iconmonstr-iconic-font.min.css" />
+  <link rel="stylesheet" href="{% static 'staticfiles/uikit/styles/uikit.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/app.css' %}" />
+
+  <title>ToolShare - FIND THE RIGHT TOOL</title>
+    <link rel="stylesheet" href="{% static 'staticfiles/styles/app.css' %}">
+    <link rel="stylesheet" href="{% static 'staticfiles/styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'staticfiles/uikit/styles/app.css' %}">
+    <link rel="stylesheet" href="{% static 'staticfiles/uikit/index.html' %}">
+
+    <script src="{% static 'staticfiles/js/main.js' %}"></script>
+    <script src="{% static 'staticfiles/uikit/app.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+  .star-light {
+      color: #e4e5e9;
+  }
+  .text-warning {
+      color: #ffc107;
+  }
+  .rating-text {
+      color: purple;
+      font-family: 'Arial', sans-serif; /* Ensure consistent font family */
+      font-size: 50px; /* Adjust font size if needed */
+      font-weight: bold;
+  }
+  .ratiing{
+      color: rgb(126, 192, 205);
+      font-family: 'Arial'; /* Ensure consistent font family */
+      font-size: 28px; /* Adjust font size if needed */
+  }
+  .revcount{
+      color: rgb(81, 145, 158);
+      font-family: 'arial', sans-serif; /* Ensure consistent font family */
+      font-size: 28px; /* Adjust font size if needed */
+  }
+</style>
+<style>
+  .back-button {
+      margin: 20px;
+      padding: 10px 20px;
+      background-color: #3f4156; /* Adjust color to match your theme */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      position: sticky;
+  }
+  .back-button:hover {
+      transform: scale(1.05); /* Adjust color to match your theme */
+  }
+</style>
+    <style>
+      /* For the parallax scrolling effect */
+/* For the parallax scrolling effect */
+.parallax {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.parallax img {
+    transition: transform 0.3s ease-in-out;
+    transform-origin: center center;
+}
+.tag pill
+/* For the hover zoom effect */
+.card.project {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transform-origin: center center;
+    backface-visibility: hidden;
+    will-change: transform;
+}
+
+.card.project:hover {
+    transform: scale(1.07);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.parallax img:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
+.tag--pill {
+    transition: transform 0.2s ease-in-out; /* Smooth transition for transform */
+}
+
+.tag--pill:hover {
+    transform: scale(1.1); /* Slightly enlarge the button on hover */
+    /*background-color: #f0f0f0;  Optional: change background color on hover */
+    /* Optional: change background color on hover */
+}
+
+/* Additional styling for edit and delete buttons */
+.btn--spaced, .btn--lg {
+    transition: transform 0.2s ease-in-out;
+}
+
+.btn--spaced:hover, .btn--lg:hover {
+    transform: scale(1.1);
+
+}
+/* Search Section Placement */
+.search-section {
+    margin-top: 15px;
+    padding: 0;
+    display: flex;
+    align-items: flex-start; /* Align content to start */
+    justify-content: flex-start; /* Avoid centering */
+}
+
+/* Search Form Styling */
+.search-form {
+    display: flex;
+    flex-direction: row; /* Place elements inline */
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem; /* Smaller font for sleekness */
+    margin-left: 8px;
+}
+
+.form-row {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #333;
+    margin-left: 445px;
+    margin-right: -50px;
+}
+
+.input--select {
+    padding: 4px 5px;
+    font-size: 1.3rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: border-color 0.2s ease;
+    margin-left: 80px; /* Subtle spacing from the label */
+    margin-right: 5px;
+}
+
+.input--select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Location Info Styling */
+.location-info {
+    font-size: 1.5rem;
+    color: #555;
+    display: flex;
+    flex-wrap: wrap; /* Allows content to break into multiple lines if too long */
+    gap: 5px;
+}
+
+.location-name {
+    font-weight: bold;
+    flex-wrap: wrap;
+    margin-right:90px;
+    color: #333; /* Slight emphasis for location name */
+}
+
+.coordinates {
+    font-size: 0.85rem;
+    color: #666; /* Slightly lighter color for the coordinates */
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+}
+
+/* Button Styling */
+.btn-location {
+    padding: 10px 11px;
+    background-color:rgb(59, 49, 59);
+    color: #fff;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-location:hover {
+    transform: scale(1.02);
+}
+
+/* Adaptive Design for Responsiveness */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column; /* Stacks elements vertically on smaller screens */
+        align-items: flex-end;
+        gap: 8px;
+    }
+}
+
+/* Parallax effect on scroll */
+@media (prefers-reduced-motion: no-preference) {
+    .parallax img {
+        transform: translateY(calc(-15% + 5vh)); /* Adjust the amount based on your preference */
+    }
+
+    .parallax img:hover {
+        transform: translateY(calc(-20% + 5vh)) scale(1.1); /* Combine hover zoom with parallax scroll */
+    }
+}
+
+  </style>
+  <style>
+    .card-flip {
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.card-flip:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    .card-tilt {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+.card-tilt:hover {
+    transform: rotateX(10deg) rotateY(10deg);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.card-shadow-pulse {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card-shadow-pulse:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+.card-glow {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card-glow:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+.card-tilt {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transform-style: preserve-3d;
+}
+}
+
+    </style>
+  <style>
+         .project__title-container {
+          height: 40px; /* Adjust this value based on your design */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          text-align: center;
+      }
+
+      .project__title {
+          font-size: calc(1em + 0.5vw); /* Adjust font size dynamically based on viewport width */
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
+      }
+
+  </style>
+    <style>
+     #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #CAD1E4; /* You can change this to match your theme */
+     /* Optional background image */
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+<!--header-->
+  <header class="header">
+    <div class="container container--narrow">
+      <a href="{% url 'SiteAdm:HomePage' %}" class="header__logo">
+        <img src="{% static 'staticfiles/images/icon.svg' %}" alt="Tool Share Logo" />
+      </a>
+      <nav class="header__nav">
+        <input type="checkbox" id="responsive-menu" />
+        <label for="responsive-menu" class="toggle-menu">
+          <span>Menu</span>
+          <div class="toggle-menu__lines"></div>
+        </label>
+        <ul class="header__menu">
+          {% if admin_authenticated %}
+          
+          <li class="header__menuItem"><a href="{% url 'Guest:Logout' %}" class="btn btn--sub">Logout</a></li>
+          {% else %}
+          <li class="header__menuItem"><a href="{% url 'Guest:Login' %}" class="btn btn--sub">Login/Sign Up</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+    <!-- Main Section -->
+    
+    <main class="home">
+        {% block content %}
+        
+        {% endblock %}
+    </main>
+</body>
+<script>
+  particlesJS('particles-js', {
+    "particles": {
+      "number": {
+        "value": 80,
+        "density": {
+          "enable": true,
+          "value_area": 800
+        }
+      },
+      "color": {
+        "value": ["#3f4156"]
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        },
+        "polygon": {
+          "nb_sides": 5
+        },
+        "image": {
+          "src": "img/github.svg",
+          "width": 100,
+          "height": 100
+        }
+      },
+      "opacity": {
+        "value": 0.5,
+        "random": false,
+        "anim": {
+          "enable": false,
+          "speed": 1,
+          "opacity_min": 0.1,
+          "sync": false
+        }
+      },
+      "size": {
+        "value": 3,
+        "random": true,
+        "anim": {
+          "enable": false,
+          "speed": 40,
+          "size_min": 0.1,
+          "sync": false
+        }
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#533F53",
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 6,
+        "direction": "none",
+        "random": false,
+        "straight": false,
+        "out_mode": "out",
+        "bounce": false,
+        "attract": {
+          "enable": false,
+          "rotateX": 600,
+          "rotateY": 1200
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "repulse"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "push"
+        },
+        "resize": true
+      },
+      "modes": {
+        "grab": {
+          "distance": 400,
+          "line_linked": {
+            "opacity": 1
+          }
+        },
+        "bubble": {
+          "distance": 400,
+          "size": 40,
+          "duration": 2,
+          "opacity": 8,
+          "speed": 3
+        },
+        "repulse": {
+          "distance": 200,
+          "duration": 0.4
+        },
+        "push": {
+          "particles_nb": 4
+        },
+        "remove": {
+          "particles_nb": 2
+        }
+      }
+    },
+    "retina_detect": true
+  });
+</script>
+{% block head %}
+
+{% endblock %}
+
+</html>

@@ -1,0 +1,90 @@
+{% extends 'SiteAdm/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .admin-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .logout-btn {
+        background-color: #D9534F;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .logout-btn:hover {
+        background-color: #C9302C;
+    }   
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin HomePage</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external stylesheet -->
+</head>
+<body>
+    <div class="hero-section text-center">
+        <div class="container container--narrow">
+        <div class="hero-section__box">
+            <h2>WELCOME TO <span>ADMIN HOMEPAGE</span></h2>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+       
+    
+        <div class="column column--1of3">
+            
+           
+            <div class="card text-center">
+                <div class="card__body">
+                    <!-- <div class="dev__details"> -->
+                        
+                        <a class="devInfo__title" href="{% url 'SiteAdm:Viewallusers'  %}">&#x1F465; View Users</a>
+                       
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="card text-center">
+                <div class="card__body">
+                    <!-- <div class="dev__details"> -->
+                        
+                        <a class="devInfo__title" href="{% url 'SiteAdm:Viewcomplaint'  %}">&#x26A0; View Complaints</a>
+                       
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="card text-center">
+                <div class="card__body">
+                    <!-- <div class="dev__details"> -->
+                        
+                        <a class="devInfo__title" href="{% url 'SiteAdm:Repliedcomplaints'  %}">&#x1F4AC; Replied Complaints</a>
+                       
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="card text-center">
+                <div class="card__body">
+                    <!-- <div class="dev__details"> -->
+                        
+                        <a class="devInfo__title" href="{% url 'SiteAdm:Category'  %}">&#x1F5C2; Category</a>
+                       
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+        
+    
+    </div>
+</body>
+</html>
+{% endblock %}

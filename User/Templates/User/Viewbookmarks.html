@@ -1,0 +1,117 @@
+{% extends 'User/base.html' %}
+
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookmarks</title>
+</head>
+<style>
+  .card {
+
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+background-color: transparent;
+backdrop-filter: blur(8px);
+}
+.tool__thumbnail {
+width: 100%;
+height: auto; /* Maintain aspect ratio */
+object-fit: cover; /* Ensure the image covers the entire area */
+display: block; /* Remove any inline spacing */
+}
+.tool__name {
+font-size: 3.0rem;
+margin: 0.5rem 0;
+}
+</style>
+<body>
+  <a id="back-button" class="back-button">&#x2B05; Back</a>
+    <section class="container">
+      
+      <div class="column column--2of3">
+          <div class="devInfo">
+              <h3 class="devInfo__title">Saved Items</h3>
+              <div class="grid grid--three">
+        
+                {% for tool, j in bm %}
+                <div class="column">
+                    <div class="card project parallax card-glow card-shadow-pulse card-tilt">
+                        <a href="{% url 'User:Rentdetails' tool.tool.id %}" class="tool">
+                            {% if tool.tool.gallery_file %}
+                                <img class="tool__thumbnail" src="{{ tool.tool.gallery_file.url }}" alt="tool image" />
+                            {% else %}
+                                <img class="tool__thumbnail" src="{% static 'staticfiles/images/default.jpg' %}" alt="default image" />
+                            {% endif %}
+                        </a>
+                        <div class="card__body">
+                            <h3 class="tool__name">{{ forloop.counter }}. {{ tool.tool.tool_name }}</h3>
+                            <p class="tool__info">{{ tool.tool.tool_details }}</p>
+                            <p class="tool__price">Price per day: {{ tool.tool.tool_priceperday }}</p>
+                            <p class="owner_contact">Contact: {{ tool.tool.user_contact }}</p>
+                            <div class="col-sm-4 text-center">
+                              {% if j > 0.00 %}
+                              <p class="ratiing">Rating</p>
+                                <h1>
+                                    <b><span class="rating-text">{% if j is not None %}{{ j }}{% else %}0.0{% endif %}</span> / 5</b>
+                                </h1>
+                                <div class="mb-3">
+                                    {% for k in ar %}
+                                        {% if k <= j %}
+                                        <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                        <i class="fas fa-star star-light"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <h3><span class="revcount">{{ tool.tool.tbl_rating_set.count }}</span> Review(s)</h3>
+                              {% else %}
+                              <p class="ratiing">Rating</p>
+                                <h1>
+                                    <b><span class="rating-text">   0    </span>/ 5 </b>
+                                </h1>
+                
+                                
+                                <div class="mb-3">
+                                  {% for k in ar %}
+                                      {% if k <= j %}
+              
+                                      <i class="fas fa-star text-warning"></i>
+                                      {% else %}
+                                      <i class="fas fa-star star-light"></i>
+                                      {% endif %}
+                                  {% endfor %}
+                              </div>
+                              <h3><span class="revcount"> </span>No reviews yet</h3>
+                              {% endif %}
+  
+                            </div>
+                            <div>
+                                <a href="{% url 'User:Rentdetails' tool.tool.id %}"><input class="btn btn--sub btn--lg btn--spaced" type="submit" value="Rent" /></a>
+                                <a href="{% url 'User:deletebookmark' tool.id 'ntool' %}"><input class="btn btn--spaced" type="submit" value="Unsave" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No bookmarks found.</p>
+                {% endfor %}
+        </div>
+      </div>
+      </div>  
+      
+                    
+               
+    </div>
+      </div>  
+     
+  </section>
+</body>
+</html>  
+<script>
+  var backbutton = document.getElementById('back-button');
+  backbutton.addEventListener('click', function() {
+    window.history.back();
+  });
+</script>
+{% endblock %} 

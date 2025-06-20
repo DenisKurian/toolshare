@@ -1,0 +1,242 @@
+{% extends 'User/base.html' %}
+{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Management</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+<head>
+    <title>Tool</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    form {
+        background-color: transparent;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        backdrop-filter: blur(8px);
+        
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        color: unset;
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.1));
+        
+        
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .btn-tool {
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 10px 0;
+        border: none;
+        background-color: #28a745;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-tool:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+    .action-links a {
+        text-decoration: none;
+        color: #007bff;
+        margin-right: 10px;
+    }
+    .action-links a:hover {
+        text-decoration: underline;
+    }
+    .card {
+
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: transparent;
+        backdrop-filter: blur(8px);
+        height: auto;
+    }
+    .gallery-slider {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .gallery-image {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .gallery-image:hover {
+            transform: scale(1.05);
+        }
+.tool__thumbnail {
+width: 100%;
+height: auto; /* Maintain aspect ratio */
+object-fit: scale; /* Ensure the image covers the entire area */
+display: block; /* Remove any inline spacing */
+
+}
+.tool__name {
+font-size: 3.0rem;
+margin: 0.5rem 0;
+}
+</style>
+<body>
+    <div class="container">
+        <h1>Add Tool</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="auth__form">
+                <tr>
+                    <td>Toolname</td>
+                    <td><input type="text" name="txttoolname" pattern="^[A-Za-z\s]+$" value="{{tooled.tool_name}}" class="form__field" required></td>
+                </tr>
+                <tr>
+                    <td>Details</td>
+                    <td><input type="text" name="txtdetails" value="{{tooled.tool_details}}" class="form__field" required></td>
+                </tr>
+                <tr>
+                    <td>Quantity</td>
+                    <td><input required type="text" name="txtquantity" minlength="1" maxlength="2" pattern="^[1-9][0-9]*$" minlength="1" maxlength="2" pattern="^[1-9][0-9]*$" value="{{tooled.tool_quantity}}"></td>
+                </tr>
+        
+                <tr>
+                    <td>Select Category</td>
+                    <td><select name="sel category" id="" required>
+                        <option value="">--SELECT--</option>
+                        {% for i in cat %}
+                        <option value="{{i.id}}">{{i.category_name}}</option>
+                        {% endfor %}
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Price per day</td>
+                    <td><input type="text" name="txtprice" minlength="2" maxlength="4" pattern="^[1-9][0-9]*$" value="{{tooled.tool_priceperday}}" class="form__field" required></td>
+                </tr>
+                <tr>
+                    <td>Select File (Add a thumbnail image to make your tool more appealing)</td>
+                    <td><input type="file" name="btnfile"></td>
+                </tr>
+                <tr>
+                    <td>Deposit</td>
+                    <td><input required type="text" name="txtdeposit" minlength="2" maxlength="5" pattern="^[1-9][0-9]*$" value="{{tooled.tool_deposit}}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <input class="btn-tool" type="submit" name="btnsubmit" value="Submit">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div class="column column--2of3">
+            <div class="devInfo">
+                <h3 class="devInfo__title">Products</h3>
+                <div class="grid grid--three">
+                    {% for i, avg in user_tools_ratings %}
+                    <div class="column">
+                        <div class="card project parallax">
+                            
+                              {% if i.gallery_file %}
+                                <img class="tool__thumbnail parallax" src="{{ i.gallery_file.url }}" alt="project thumbnail" />
+                              {% else %}
+                                  <img class="tool__thumbnail parallax" src="{% static 'staticfiles/images/default.jpg' %}" alt="project thumbnail" />
+                              {% endif %}
+                                <div class="card__body">
+                                    <span class="project__title-container"><p><h3 class="project__title">{{ forloop.counter }}. {{ i.tool_name }}</h3></p></span>
+                                    <p><a class="project__author">{{ i.category.category_name }}</a></p>
+                                    <a href="{% url 'User:deletetool' i.id %}"><span class="tag tag--pill btn--spaced">
+                                        <small>Delete</small>
+                                    </span></a>
+                            
+                                    <p class="project--rating">
+                                      <div class="card__body">
+                                          
+                                          
+                                          <div class="col-sm-4 text-center">
+                                            {% if i.tbl_rating_set.count > 0 %}
+                                            <p class="ratiing">Rating</p>
+                                              <h1>
+                                                  <b><span class="rating-text">{{ avg }}</span> / 5</b>
+                                              </h1>
+                                              <div class="mb-3">
+                                                  {% for k in "12345" %}
+                                                      {% if forloop.counter0 < avg %}
+                                                      <i class="fas fa-star text-warning"></i>
+                                                      {% else %}
+                                                      <i class="fas fa-star star-light"></i>
+                                                      {% endif %}
+                                                  {% endfor %}
+                                              </div>
+                                              <h3><span class="revcount">{{ i.tbl_rating_set.count }}</span> Review(s)</h3>
+                                            {% else %}
+                                            <p class="ratiing">Rating</p>
+                                              <h1>
+                                                  <b><span class="rating-text">   {{ avg }}     </span>/ 5 </b>
+                                              </h1>
+                              
+                                              
+                                              <div class="mb-3">
+                                                {% for k in "12345" %}
+                                                    {% if forloop.counter0 < avg %}
+                                                    <i class="fas fa-star text-warning"></i>
+                                                    {% else %}
+                                                    <i class="fas fa-star star-light"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <h3><span class="revcount"> </span>No reviews yet</h3>
+                                            {% endif %}
+                
+                                          </div>
+                                    </p>
+                                    
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</body>
+
+
+</html>
+{% endblock %}
+
+

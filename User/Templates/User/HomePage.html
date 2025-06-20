@@ -1,0 +1,314 @@
+{% extends 'User/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    
+.card {
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    backdrop-filter: blur(8px);
+}
+.tool__thumbnail {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensure the image covers the entire area */
+    display: block; /* Remove any inline spacing */
+}
+.tool__name {
+    font-size: 3.0rem;
+    margin: 0.5rem 0;
+}
+.select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+}
+</style>
+<section class="hero-section text-center">
+    <div class="container container--narrow">
+        <div class="hero-section__box">
+            <h2>FIND THE <span>RIGHT</span></h2>
+            <h2>TOOLS FOR YOU</h2>
+        </div>
+        <div class="hero-section__search">
+            <form class="form" action="#" method="get">
+                {% csrf_token %}
+                
+                <div class="form__field">
+                    
+                    <input class="input input--text" type="text" name="toolname" id="toolname"
+                           placeholder="Search by tool name">
+                    <input class="btn btn--sub btn--lg" id="searchButton" type="button" value="Search &#x1F50E;&#xFE0E;" onclick="ajaxProduct()">
+                
+                        <label for="formInput#category" class="form-label">Category</label>
+                        <select class="input" name="selcategory" id="selcategory" onchange="ajaxProduct()">
+                            <option value="">--SELECT--</option>
+                            {% for i in cat %}
+                            <option value="{{ i.id }}">{{ i.category_name }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                
+                    
+                </div>
+                
+                
+            </form>
+        </div>
+    </div>
+</section>
+<section class="search-section">
+    <form class="search-form" action="#" method="get">
+        {% csrf_token %}
+        {% if error %}
+        <p class="error-message">{{ error }}</p>
+        {% endif %}
+        
+        <button id="getLocationBtn" class="btn-location">&#x1F4CD;Use My Current Location</button>
+        <p class="location-info">Your Location:<span class="location-name">{{ location_name}}</span></p>
+        <!-- <div class="form-row">
+            <label for="formInput#category" class="form-label">Category</label>
+            <select class="input input--select" name="selcategory" id="selcategory" onchange="ajaxProduct()">
+                <option value="">--SELECT--</option>
+                {% for i in cat %}
+                <option value="{{ i.id }}">{{ i.category_name }}</option>
+                {% endfor %}
+            </select>
+            
+        </div> -->
+        
+    </form>
+</section>
+<section class="container">
+    
+    <div class="column column--2of3">
+        
+        <div class="devInfo">
+            <h3 class="devInfo__title">Products</h3>
+            <div class="grid grid--three" id="result">
+        {% if is_authenticated %} 
+        {% for tool, j, l, m in datas %}
+          <div class="column">
+              <div class="card project parallax card-glow card-shadow-pulse card-tilt">
+                  <a href="{% url 'User:Rentdetails' tool.id %}" class="tool">
+                    {% if tool.gallery_file %}
+                                <img class="tool__thumbnail" src="{{ tool.gallery_file.url }}" alt="tool image" />
+                            {% else %}
+                                <img class="tool__thumbnail" src="media\Assets\default.jpg" alt="default image" />
+                            {% endif %}
+          
+                      <div class="card__body">
+                          <h3 class="tool__name">{{ tool.tool_name }}</h3>
+                          <p class="tool__info">{{ tool.category.category_name }}</p>
+                          {% if is_authenticated %}
+                          <p class="tool__price">Price per day: {{ tool.tool_priceperday }}</p>
+                          <p class="owner_contact">Contact: {{ tool.user.user_contact }}</p>
+                          <p class="distance">Distance: {% if m is not None %}{{ m|floatformat:2 }} km{% else %}N/A{% endif %}</p>
+                          <div class="col-sm-4 text-center">
+                            {% if j > 0.00 %}
+                            <p class="ratiing">Rating</p>
+                              <h1>
+                                  <b><span class="rating-text">{% if j is not None %}{{ j }}{% else %}0.0{% endif %}</span> / 5</b>
+                              </h1>
+                              <div class="mb-3">
+                                  {% for k in ar %}
+                                      {% if k <= j %}
+                                      <i class="fas fa-star text-warning"></i>
+                                      {% else %}
+                                      <i class="fas fa-star star-light"></i>
+                                      {% endif %}
+                                  {% endfor %}
+                              </div>
+                              <h3><span class="revcount">{{ tool.tbl_rating_set.count }}</span> Review(s)</h3>
+                            {% else %}
+                            <p class="ratiing">Rating</p>
+                              <h1>
+                                  <b><span class="rating-text">   0    </span>/ 5 </b>
+                              </h1>
+              
+                              
+                              <div class="mb-3">
+                                {% for k in ar %}
+                                    {% if k <= j %}
+            
+                                    <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                    <i class="fas fa-star star-light"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <h3><span class="revcount"> </span>No reviews yet</h3>
+                            {% endif %}
+
+                          </div>
+                          <div>
+                              <a href="{% url 'User:Rentdetails' tool.id %}"><input class="btn btn--sub btn--lg btn--spaced" type="submit" value="Rent" /></a>
+                              {% if l == 0 %}
+                                <a href="{% url 'User:bookmark' tool.id 'datas' %}"><input class="btn btn--spaced" type="submit" value="Save" /></a>
+                              {% else %}
+                                <a href="{% url 'User:deletebookmark' l 'datas' %}"><input class="btn btn--spaced" type="submit" value="Unsave" /></a>
+                              {% endif %}
+            
+                          </div>
+                        {% else %}
+                          <p>Please log in to view more details and make bookings.</p>
+                        {% endif %}
+                          <!--div class="project__tags">
+                                <span class="tag tag--pill">{{ tool.tool_category }}</span> 
+                          </div-->
+                      </div>
+                  </a>
+                  
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+    </div>
+    </div>  
+    {% else %}
+          {% for tool in tools %}
+          <div class="column">
+              <div class="card project" id="result">
+                  <a href="{% url 'User:Rentdetails' tool.id %}" class="tool">
+                    {% if tool.gallery_file %}
+                                <img class="tool__thumbnail" src="{{ tool.gallery_file.url }}" alt="tool image" />
+                            {% else %}
+                                <img class="tool__thumbnail" src="media\Assets\default.jpg" alt="default image" />
+                            {% endif %}
+          
+                      <div class="card__body">
+                          <h3 class="tool__name"> {{ tool.tool_name }}</h3>
+                          <p class="tool__info">{{ tool.category.category_name }}</p>
+                          {% if is_authenticated %}
+                          <p class="tool__price">Price per day: {{ tool.tool_priceperday }}</p>
+                          <p class="owner_contact">Contact: {{ tool.user.user_contact }}</p>
+                          <div class="col-sm-4 text-center">
+                            {% if tool.tbl_rating_set.count > 0 %}
+                            <p class="ratiing">Rating</p>
+                              <h1>
+                                  <b><span class="rating-text">{{ avg }}</span> / 5</b>
+                              </h1>
+                              <div class="mb-3">
+                                  {% for k in "12345" %}
+                                      {% if forloop.counter0 < avg %}
+                                      <i class="fas fa-star text-warning"></i>
+                                      {% else %}
+                                      <i class="fas fa-star star-light"></i>
+                                      {% endif %}
+                                  {% endfor %}
+                              </div>
+                              <h3><span class="revcount">{{ tool.tbl_rating_set.count }}</span> Review(s)</h3>
+                            {% else %}
+                            <p class="ratiing">Rating</p>
+                              <h1>
+                                  <b><span class="rating-text">   {{ avg }}     </span>/ 5 </b>
+                              </h1>
+              
+                              
+                              <div class="mb-3">
+                                {% for k in "12345" %}
+                                    {% if forloop.counter0 < avg %}
+                                    <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                    <i class="fas fa-star star-light"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <h3><span class="revcount"> </span>No reviews yet</h3>
+                            {% endif %}
+
+                          </div>
+                          <div>
+                            <a href="{% url 'User:Rentdetails' tool.id %}"><input class="btn btn--sub btn--lg btn--spaced" type="submit" value="Rent" /></a>
+                            {% if l == 0 %}
+                              <a href="{% url 'User:bookmark' tool.id 'datas' %}"><input class="btn btn--spaced" type="submit" value="Save" /></a>
+                            {% else %}
+                              <a href="{% url 'User:deletebookmark' l 'datas' %}"><input class="btn btn--spaced" type="submit" value="Unsave" /></a>
+                            {% endif %}
+                          </div>
+                          {% else %}
+                          <p>Please log in to view more details and make bookings.</p>
+                          {% endif %}
+                          <!--div class="project__tags">
+                                <span class="tag tag--pill">{{ tool.tool_category }}</span> 
+                          </div-->
+                      </div>
+                  </a>
+              </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+    </div>  
+    {% endif %}
+    
+</section>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <script>
+            document.getElementById('getLocationBtn').addEventListener('click', function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            window.location.href = "{% url 'User:HomePage' %}?lat=" + lat + "&lon=" + lon;
+                        },
+                        function (error) {
+                            alert("Unable to retrieve your location: " + error.message);
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by your browser.");
+                }
+            });
+
+            function ajaxProduct() {
+                
+                var name = document.getElementById('searchButton').addEventListener('click', ajaxProduct);
+                var name = document.getElementById('toolname').value;
+                var catid = document.getElementById('selcategory').value;
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            
+                            var ur = "{% url 'User:ajaxsearchtool' %}"
+                            $.ajax({
+                                url: ur,
+                                data: { catid: catid, lat: lat, lon: lon, name:name },
+                                success: function (data) {
+                                    $("#result").html(data);
+                                }
+                            });
+
+                        },
+                        function (error) {
+                            alert("Unable to retrieve your location: " + error.message);
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by your browser.");
+                }
+
+            };
+        </script>
+        <script>
+            
+        </script>
+</body>
+
+</html>
+
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends 'SiteAdm/base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    /* General Styles */
+
+
+/* Centered Container */
+.tcontainer {
+    width: 60%;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+.heading {
+    text-align: center;
+    color: #3F4156;
+    border-bottom: 3px solid #3F4156;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Form Styling */
+.form-container {
+    background-color: #E5E8F1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #3F4156;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #F4F5FA;
+    color: #3F4156;
+    margin-top: 5px;
+}
+
+/* Submit Button */
+.submit-btn {
+    background-color: #3F4156;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: block;
+    margin: 10px auto 0;
+}
+
+.submit-btn:hover {
+    background-color: #2B2D42;
+}
+
+/* Category Table */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #3F4156;
+    padding: 10px;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #3F4156;
+    color: white;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #E5E8F1;
+}
+
+.data-table tr:hover {
+    background-color: #D4DAEC;
+}
+
+/* Action Links */
+.action-link {
+    padding: 5px 10px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 5px;
+    transition: 0.3s;
+}
+
+.action-link.delete {
+    background-color: #D9534F;
+    color: white;
+}
+
+.action-link.delete:hover {
+    background-color: #C9302C;
+}
+
+.action-link.edit {
+    background-color: #5BC0DE;
+    color: white;
+}
+
+.action-link.edit:hover {
+    background-color: #31B0D5;
+}
+
+/* Center Align */
+.center {
+    text-align: center;
+}
+
+</style>
+<style>
+    .back-button {
+        margin: 20px;
+        padding: 10px 20px;
+        background-color: #3f4156; /* Adjust color to match your theme */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        position: sticky;
+    }
+    .back-button:hover {
+        transform: scale(1.05); /* Adjust color to match your theme */
+    }
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Linking to external stylesheet -->
+</head>
+<body>
+    <a id="back-button" class="back-button">&#x2B05; Back</a> 
+    <div class="container">
+        <h1 class="heading">Manage Categories</h1>
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                <label for="cname">Category:</label>
+                <input required type="text" id="cname" name="cname" value="{{cated.category_name}}" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
+                <div class="center">
+                    <input type="submit" class="submit-btn" value="Submit">
+                </div>
+            </form>
+        </div>
+
+        <h1 class="heading">Category List</h1>
+        <table class="data-table">
+            <tr>
+                <th>SL NO</th>
+                <th>Category</th>
+                <th>Action</th>
+            </tr>
+            {% for i in cat %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.category_name }}</td>
+                <td>
+                    <a href="{% url 'SiteAdm:deletecat' i.id %}" class="action-link delete">Delete</a>
+                    <a href="{% url 'SiteAdm:editcat' i.id %}" class="action-link edit">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
+<script>
+    document.getElementById('back-button').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+{% endblock %}

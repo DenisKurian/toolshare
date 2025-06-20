@@ -1,0 +1,13 @@
+<svg width="600" height="100" viewBox="0 0 600 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Wrench Icon -->
+  <g transform="translate(20, 20) scale(3)">
+    <path d="M20 12.586L13.414 19.172L14.828 20.586L21.414 14L20 12.586ZM14.828 10.586L8.414 17L9.828 18.414L16.242 12L14.828 10.586ZM17.586 3.586L21.172 7.172L19.758 8.586L16.172 5L17.586 3.586Z" fill="#007BFF"/>
+  </g>
+  <!-- Gear Icon -->
+  <g transform="translate(50, 20) scale(3)">
+    <path d="M15 6C13.345 6 12 7.345 12 9C12 10.656 13.345 12 15 12C16.655 12 18 10.656 18 9C18 7.345 16.655 6 15 6ZM7.414 10.414L6 9L0.586 14.414L2 15.828L7.414 10.414ZM15 2C15 0.895 14.105 0 13 0C11.895 0 11 0.895 11 2C11 3.105 11.895 4 13 4C14.105 4 15 3.105 15 2ZM22.586 14.414L18 18.999L15.828 16.828L20.414 12.242L22.586 14.414Z" fill="#007BFF"/>
+  </g>
+  <!-- Text: ToolShare -->
+  <text x="120" y="60" font-family="Arial" font-size="60" fill="#2d2d39" font-weight="bold">TOOL SHARE</text>
+</svg>

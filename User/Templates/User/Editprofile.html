@@ -1,0 +1,176 @@
+{% extends 'User/base.html' %} <!-- Extending the base.html file -->
+<!-- Title of the page -->
+{% block content %} <!-- Content of the page -->
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("Location access denied. Please allow location access and refresh the page.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
+        function validateForm(event) {
+            let lat = document.getElementById("latitude").value;
+            let lon = document.getElementById("longitude").value;
+            if (lat === "" || lon === "") {
+                alert("We only accept your current location. Please allow location access.");
+                event.preventDefault(); // Prevent form submission
+            }
+        }
+
+        window.onload = function() {
+            alert("We only accept your current location for registration. Please make sure it is correct.");
+            getLocation();
+        //     if (this.checked) {
+        // getLocation(); // Fetch location only if the checkbox is checked
+    //}
+        };
+    </script>
+
+
+<head>
+    
+    <title>Edit Profile</title>
+    
+    <style>
+       
+
+        .profcontainer {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-container td {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <a id="back-button" class="back-button">&#x2B05; Back</a>
+    <div class="container">
+        <h1>Edit Profile</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %} 
+            <table>
+                <tr>
+                    <td><label for="txtname">Name</label></td>
+                    <td><input type="text" id="txtname" name="txtname" pattern="^[A-Z]+[a-zA-Z ]*$" value="{{ profeddata.user_name }}"></td>
+                </tr>
+                <tr>
+                    <td><label for="txtemail">Email</label></td>
+                    <td><input type="text" id="txtemail" name="txtemail" pattern="[7-9]{1}[0-9]{9}" value="{{ profeddata.user_email }}"></td>
+                </tr>
+                <tr>
+                    <td><label for="txtcontactno">Contact</label></td>
+                    <td><input type="text" id="txtcontactno" name="txtcontactno" value="{{ profeddata.user_contact }}"></td>
+                </tr>
+                <tr>
+                    <td><label for="update_location">Update Location?</label></td>
+                    <td><input type="checkbox" id="update_location" name="update_location"></td>
+                </tr>
+                <tr>
+                    <td><label for="latitude">Latitude</label></td>
+                    <td><input type="text" id="latitude" name="latitude" value="{{ profeddata.user_latitude }}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="longitude">Longitude</label></td>
+                    <td><input type="text" id="longitude" name="longitude" value="{{ profeddata.user_longitude }}" readonly></td>
+                </tr>
+                <tr>
+                    <td><label for="fphoto">Photo</label></td>
+                    <td><input type="file" id="fphoto" name="fphoto"></td>
+                </tr>
+                <tr>
+                    <td><label for="fproof">Proof</label></td>
+                    <td><input type="file" id="fproof" name="fproof"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" name="btnsubmit" value="Update"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+<script>
+    document.getElementById('back-button').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+{% endblock %} <!-- End of the content block -->

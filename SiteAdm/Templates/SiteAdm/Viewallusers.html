@@ -1,0 +1,163 @@
+{% extends 'SiteAdm/base.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <style>
+        /* General Styles */
+        
+
+        .tcontainer {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        
+
+        /* Table Styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #3F4156;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .data-table th {
+            background-color: #3F4156;
+            color: white;
+        }
+
+        .data-table td {
+            background-color: #f5f5f5;
+        }
+
+        /* Image Styling */
+        .user-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        /* Action Links */
+        .action-links a {
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .view-link {
+            background-color: #5BC0DE;
+            color: white;
+        }
+
+        .block-link {
+            background-color: #D9534F;
+            color: white;
+        }
+
+        .unblock-link {
+            background-color: #5CB85C;
+            color: white;
+        }
+
+        .view-link:hover {
+            background-color: #31B0D5;
+        }
+
+        .block-link:hover {
+            background-color: #C9302C;
+        }
+
+        .unblock-link:hover {
+            background-color: #4CAE4C;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .data-table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 8px;
+            }
+            .user-image {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a id="back-button" class="back-button">&#x2B05; Back</a> 
+    <div class="container">
+        <h1>All Users</h1>
+        <form method="post">
+            {% csrf_token %}
+            <table class="data-table">
+                <tr>
+                    <th>SL No</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Location</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Photo</th>
+                    <th>Proof</th>
+                    <th>Action</th> 
+                </tr>
+                {% for i in user %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.user_name}}</td>
+                    <td>{{i.user_email}}</td>
+                    <td>{{i.user_contact}}</td>
+                    <td>{{i.location_name}}</td>
+                    <td>{{i.user_latitude}}</td>
+                    <td>{{i.user_longitude}}</td>
+                    <td><img src="{{i.user_photo.url}}" class="user-image"></td>
+                    {% if i.user_proof %}
+                    <td><img src="{{i.user_proof.url}}" class="user-image"></td>
+                    {% else %}
+                    <td>N/A</td>
+                    {% endif %}
+                    <td class="action-links">
+                        <a href="{% url 'SiteAdm:Viewusertooldetails' i.id %}" class="view-link">View Tools</a>
+                        {% if i.user_status == 0 %}
+                        <a href="{% url 'SiteAdm:blockuser' i.id 1 %}" class="block-link">Block</a>
+                        {% else %}
+                        <a href="{% url 'SiteAdm:blockuser' i.id 0 %}" class="unblock-link">Unblock</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+
+</body> 
+</html>
+<script>
+    document.getElementById('back-button').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+{% endblock %}

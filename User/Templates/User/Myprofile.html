@@ -1,0 +1,129 @@
+{% extends 'User/base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+  .btn--sub:hover {
+    transform: scale(1.05);
+  }
+  .project__thumbnail {
+    width: 100%;         /* Make the image fit the card width */
+    height: auto;        /* Maintain aspect ratio */
+    object-fit: cover;   /* Crop the image if necessary to fill the space */
+    border-radius: 5px;  /* Add rounded corners to match card design */
+}
+</style>
+
+<head>
+  <meta charset="UTF-8">
+  <title>My Profile</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"> <!-- Link to your CSS file -->
+</head>
+<body>
+  <a id="back-button" class="back-button">&#x2B05; Back</a>
+  <nav class="header__nav">
+    <input type="checkbox" id="responsive-menu" />
+    <label for="responsive-menu" class="toggle-menu">
+      <span>Menu</span>
+      <div class="toggle-menu__lines"></div>
+    </label>
+  </nav>
+
+  <!-- Main Section -->
+  <main class="profile my-md">
+    <div class="container">
+      <div class="layout">
+        <!-- Profile Section -->
+        <div class="column column--1of3">
+          <div class="card text-center">
+            <div class="card__body dev">
+              <a class="tag tag--pill tag--main settings__btn" href="{% url 'User:Changepassword' %}">
+                <i class="im im-key"></i> Change Password
+              </a>
+              {% if user.user_photo and user.user_photo.url %}
+              <img class="avatar avatar--xl dev__avatar" src="{{ user.user_photo.url }}" alt="User Photo" />
+              {% else %}
+              <img class="avatar avatar--xl dev__avatar" src="{% static 'staticfiles/images/profiles/user-default.png' %}" alt="Default User Photo" />
+              {% endif %}
+              <h2 class="dev__name">{{ user.user_name }}</h2>
+              <p class="dev__email">{{ user.user_email }}</p>
+              <p class="dev__contact">Contact: {{ user.user_contact }}</p>
+              <p class="dev__location">Location: {{ location_name }}</p>
+              <p class="dev__coordinates">Coordinates: {{ user.user_latitude }}, {{ user.user_longitude }}</p>
+              <p class="dev__tools">Total Tools: {{ user.tbl_tool_set.count }}</p>
+              <p class="dev__ratings">Total Ratings: {{ user.tbl_rating_set.count }}</p>
+              <a href="{% url 'User:Editprofile' %}" class="btn btn--spaced">Edit Profile</a>
+              <a href="{% url 'User:Viewbookmarks' %}" class="btn btn--sub btn--spaced">&#128278; Saved items</a>
+              <a href="{% url 'User:Complaint' %}" class="btn btn--sub">&#x26A0; Complaints</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="column column--2of3">
+          <div class="devInfo">
+            <h3 class="devInfo__title">Products</h3>
+            <div class="grid grid--two">
+              {% for i, j in tool %}
+              <div class="column">
+                <div class="card project parallax card-glow card-shadow-pulse card-tilt">
+                  <div class="project__thumbnail parallax">
+                  {% if i.gallery_file %}
+                  <img class="project__thumbnail parallax" src="{{ i.gallery_file.url }}" alt="project thumbnail" />
+                  {% else %}
+                  <img class="project__thumbnail parallax" src="{% static 'staticfiles/images/default.jpg' %}" alt="default image" />
+                  {% endif %}
+                </div>
+                  <div class="card__body">
+                    <h3 class="project__title">{{ forloop.counter }}. {{ i.tool_name }}</h3>
+                    <p><a class="project__author">{{ i.category.category_name }}</a></p>
+                    <p><a class="project__author">Quantity: {{ i.qty }}</a></p>
+                    <a href="{% url 'User:deletetool' i.id %}" class="tag tag--pill btn--spaced">
+                      <small>Delete</small>
+                    </a>
+                    <a href="{% url 'User:edittool' i.id %}" class="tag tag--pill btn--lg">
+                      <small>Edit</small>
+                    </a>
+                    <div class="col-sm-4 text-center">
+                      {% if j > 0.00 %}
+                      <p class="ratiing">Rating</p>
+                      <h1><b><span class="rating-text">{{ j }}</span> / 5</b></h1>
+                      <div class="mb-3">
+                        {% for k in ar %}
+                        {% if k <= j %}
+                        <i class="fas fa-star text-warning"></i>
+                        {% else %}
+                        <i class="fas fa-star star-light"></i>
+                        {% endif %}
+                        {% endfor %}
+                      </div>
+                      <h3><span class="revcount">{{ i.tbl_rating_set.count }}</span> Review(s)</h3>
+                      {% else %}
+                      <p class="ratiing">Rating</p>
+                      <h1><b><span class="rating-text">0</span> / 5</b></h1>
+                      <div class="mb-3">
+                        {% for k in ar %}
+                        <i class="fas fa-star star-light"></i>
+                        {% endfor %}
+                      </div>
+                      <h3><span class="revcount">No reviews yet</span></h3>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+
+<script>
+  document.getElementById('back-button').addEventListener('click', function() {
+      window.history.back();
+  });
+</script>
+{% endblock %}
