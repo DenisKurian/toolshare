@@ -30,5 +30,5 @@ TOOLSHARE is a Django-based web application that enables users to list, rent, an
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/toolshare.git
+   git clone https://github.com/DenisKurian/toolshare.git
    cd toolshare
