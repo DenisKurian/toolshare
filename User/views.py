@@ -15,6 +15,7 @@ from django.db.models import F
 from geopy.geocoders import Nominatim
 from django.core.paginator import Paginator
 import math
+import os
 
 def get_location_name(latitude, longitude):
     geolocator = Nominatim(user_agent="ToolShareApp", timeout=12)
@@ -117,17 +118,16 @@ def HomePage(request):
         is_authenticated = False
         tools = tbl_tool.objects.all()
        
-    context = {
-        "datas": datas,
-        "ar": ar,
-        "cat": catdata,
-        "user_location": {"latitude": user_lat, "longitude": user_lon},
-        "is_authenticated": is_authenticated,
-        "tools": tools
-        
-    }
-    
-    return render(request,"User/HomePage.html", context)
+        context = {
+            "datas": datas,
+            "ar": ar,
+            "cat": catdata,
+            "user_location": {"latitude": user_lat, "longitude": user_lon},
+            "is_authenticated": is_authenticated,
+            "tools": tools
+            
+        }
+        return render(request,"User/HomePage.html", context)
 
 def Editprofile(request):
     if "uid" not in request.session:
