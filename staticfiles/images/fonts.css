@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'BatmanForever';
+    src: url('static\staticfiles\images\Fonts\batmfo__.ttf') format('truetype');
+}
+
+.text {
+    font-family: 'BatmanForever', Arial, sans-serif;
+}
