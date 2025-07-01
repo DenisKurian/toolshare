@@ -8,293 +8,319 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    
     <!-- <link rel="stylesheet" href="path/to/your/css/styles.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
 </head>
 <style>
-    .back-button {
-        margin: 20px;
-        padding: 10px 20px;
-        background-color: #3f4156; /* Adjust color to match your theme */
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        position: sticky;
+    /* === GENERAL BUTTON === */
+.back-button {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #3f4156;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    z-index: 2;
+}
+.back-button:hover {
+    transform: scale(1.05);
+}
+
+/* === LAYOUT WRAPPERS === */
+.par-card {
+    display: flex;
+    justify-content: center;
+    margin-top: -65px;
+    margin-bottom: 50px;
+}
+.head-sec {
+    width: 100%;
+    max-width: 840px;
+    background-color: #3f4156;
+    padding: 17px;
+    border-radius: 10px;
+    border-bottom: 1px solid white;
+    display: flex;
+    gap: 10px;
+    margin: 8px auto 0;
+    margin-top: 25px;
+}
+.content, .con-card {
+    width: 100%;
+    max-width: 840px;
+    margin: auto;
+}
+.content {
+    display: flex;
+    gap: 10px;
+}
+.con-card {
+    padding: 24px;
+    border-radius: 10px;
+    background-color: transparent;
+    min-height: 520px;
+}
+
+/* === CHAT SECTION === */
+.chat-card {
+    background-color: #3f32f41c;
+    padding: 10px;
+    box-shadow: 0 0 33px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 840px;
+    margin: auto;
+    margin-top: 10px;
+    position: relative;
+}
+
+/* === CHAT SCROLL AREA === */
+.scroll-con {
+    overflow-y: scroll;
+    height: calc(100vh - 160px);
+    padding: 10px;
+}
+.scroll-con::-webkit-scrollbar {
+    display: none;
+}
+
+/* === CHAT BUBBLES === */
+.r-mess, .s-mess {
+    padding: 5px 10px;
+    border-radius: 10px;
+    max-width: 555px;
+    width: fit-content;
+    font-size: 14px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+.r-mess {
+    background-color: #BBDEFB;
+    color: black;
+}
+.s-mess {
+    background-color: #90caf9;
+    color: black;
+}
+.par-r-mess {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+.par-s-mess {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 5px;
+}
+.r-time, .s-time {
+    font-size: 9px;
+    padding: 2px;
+    color: #666;
+}
+
+/* === CHAT INPUT AREA === */
+.message-card {
+    display: flex;
+    gap: 10px;
+    padding: 16px;
+    border-top: 1px solid white;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 840px;
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    margin: auto;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+.message-box {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background-color: #F5F5F5;
+    border-radius: 10px;
+}
+.btn {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+}
+
+/* === DROPDOWN MENU === */
+.option {
+    color: white;
+    font-size: 20px;
+}
+.option-content {
+    width: 115px;
+    padding: 10px;
+    background-color: #90caf9;
+    border-radius: 10px;
+    position: absolute;
+    left: 1036px;
+    margin-top: 4px;
+    display: none;
+    transition: transform 3.9s ease-in-out;
+}
+.option-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+/* === OTHER UI === */
+.font {
+    color: white;
+    font-size: 20px;
+    font-family: 'Poor Richard', serif;
+}
+.ic-size {
+    font-size: 20px;
+    color: #533F53;
+}
+.con-width {
+    min-width: 35px;
+}
+.date-con {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: gray;
+    font-size: 13px;
+    margin: 10px 0;
+}
+
+/* === PROFILE MODAL === */
+.profile {
+    display: none;
+    width: 100%;
+    background-color: #ffffffed;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.profile-close {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.cl-ic {
+    font-size: 27px;
+    color: #d4d2d2;
+}
+.blur-page {
+    margin-top: -10px;
+    height: 100%;
+    width: 99%;
+    background-color: rgba(255, 255, 255, 0.729);
+    position: absolute;
+}
+
+/* === LOADER ANIMATION === */
+.sk-folding-cube {
+    margin: 20px auto;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: rotateZ(45deg);
+}
+.sk-folding-cube .sk-cube {
+    float: left;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    transform: scale(1.1);
+}
+.sk-folding-cube .sk-cube:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    animation: sk-foldCubeAngle 2.4s infinite linear both;
+    transform-origin: 100% 100%;
+}
+.sk-folding-cube .sk-cube2 { transform: scale(1.1) rotateZ(90deg); }
+.sk-folding-cube .sk-cube3 { transform: scale(1.1) rotateZ(180deg); }
+.sk-folding-cube .sk-cube4 { transform: scale(1.1) rotateZ(270deg); }
+.sk-cube2:before { animation-delay: 0.3s; }
+.sk-cube3:before { animation-delay: 0.6s; }
+.sk-cube4:before { animation-delay: 0.9s; }
+
+@keyframes sk-foldCubeAngle {
+    0%, 10% {
+        transform: perspective(140px) rotateX(-180deg);
+        opacity: 0;
     }
-    .back-button:hover {
-        transform: scale(1.05); /* Adjust color to match your theme */
+    25%, 75% {
+        transform: perspective(140px) rotateX(0deg);
+        opacity: 1;
     }
-</style>
-<style>
-    .par-card{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: -65px;
-        margin-bottom: 50px;
-    
+    90%, 100% {
+        transform: perspective(140px) rotateY(180deg);
+        opacity: 0;
     }
-    .head-sec {
-        width: 840px;
-        background-color: #3f4156;
-        padding: 17px;
-        border-radius: 10px;
-        border-bottom: 1px solid white;
-        margin-left: 8px;
-        margin-top: 8px;
-        display: flex;
-        gap: 10px;
-    }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+    .chat-card,
+    .head-sec,
+    .message-card,
+    .con-card,
     .content {
-        display: flex;
-        gap: 10px;
-        width: 840px;
+        width: 95% !important;
+        max-width: 100% !important;
+        margin-left: auto;
+        margin-right: auto;
     }
-    .option {
-        color:white;
-        font-size: 20px;
-    }
-    .option-content {
-        width: 115px;
-        padding: 10px;
-        background-color: #90caf9;
-        border-radius: 10px;
-        position: absolute;
-        left: 1036px;
-        margin-top: 4px;
-        display: none;
-        transition: transform 3.9s ease-in-out;
-    }
-    .option-selection {
-        display: flex;
-        gap: 5px;
-        flex-direction: column;
-        align-items: center;
-    }
-    .con-card {
-        width: 840px;
-        padding: 24px;
-        border-radius: 10px;
-        background-color: transparent;
-        min-height: 520px;
-    }
+
     .message-card {
-        padding: 24px;
-        border-radius: 10px; 
-        border-top: 1px solid white;
-        display: flex;
-        margin-bottom: -400px;
-        bottom : 390px;
-        position : absolute;
-        width : 56%;
-        backdrop-filter: blur(8px);
-    }
-    .message-box {
-        padding: 10px;
-        width: 750px;
-        margin-left: 5px;
-        border: none;
-        background-color: #F5F5F5;
-        border-radius: 10px;
-        position: relative;
-    }
-    .chat-card {
-        background-color: #3f32f41c; 
-        padding: 10px;
-        box-shadow: 0 0 33px;
-        border-radius: 10px;
-        height: 700px;
-    }
-    .btn {
-        background-color: transparent;
-        border: none;
-    }
-    .ic-size {
-        font-size: 20px;
-        color: #533F53;
-    }
-    .font {
-        color: white;
-        font-size: 20px;
-        font-family: Poor Richard;
-    }
-    .r-mess {
-        padding: 5px;
-        background-color: #BBDEFB;
-        border-radius: 10px;
-        max-width: 555px;
-        width: fit-content;
-    }
-    .s-mess {
-        padding: 5px;
-        background-color: #90caf9;
-        border-radius: 10px;
-        max-width: 555px;
-        width: fit-content;
-    }
-    .par-r-mess {
-        display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-        padding-bottom: 5px;
+        position: fixed;
+        bottom: 0;
+        padding: 12px;
+        gap: 10px;
     }
-    .par-s-mess {
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 5px;
-        align-items: flex-end;
-    }
-    .s-time {
-        padding: 2px;
-        font-size: 9px;
-        display: flex;
-        justify-content: flex-end;
-    }
-    .r-time {
-        padding: 2px;
-        font-size: 9px;
-    }
-    .con-width {
-        min-width: 35px;
-    }
+
     .scroll-con {
-        overflow-y: scroll;
-        height: 581px;
-    }
-    .scroll-con::-webkit-scrollbar {
-      display: none;
+        height: calc(100vh - 160px);
+        padding-bottom: 80px;
     }
 
-
-    .sk-folding-cube {
-        margin: 20px auto;
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        -webkit-transform: rotateZ(45deg);
-                transform: rotateZ(45deg);
-    }
-
-    .sk-folding-cube .sk-cube {
-        float: left;
-        width: 50%;
-        height: 50%;
-        position: relative;
-        -webkit-transform: scale(1.1);
-            -ms-transform: scale(1.1);
-                transform: scale(1.1); 
-    }
-    .sk-folding-cube .sk-cube:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
+    .option-content {
+        position: static;
         width: 100%;
-        height: 100%;
-        background-color: #333;
-        -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
-                animation: sk-foldCubeAngle 2.4s infinite linear both;
-        -webkit-transform-origin: 100% 100%;
-            -ms-transform-origin: 100% 100%;
-                transform-origin: 100% 100%;
-    }
-    .sk-folding-cube .sk-cube2 {
-        -webkit-transform: scale(1.1) rotateZ(90deg);
-                transform: scale(1.1) rotateZ(90deg);
-    }
-    .sk-folding-cube .sk-cube3 {
-        -webkit-transform: scale(1.1) rotateZ(180deg);
-                transform: scale(1.1) rotateZ(180deg);
-    }
-    .sk-folding-cube .sk-cube4 {
-        -webkit-transform: scale(1.1) rotateZ(270deg);
-                transform: scale(1.1) rotateZ(270deg);
-    }
-    .sk-folding-cube .sk-cube2:before {
-        -webkit-animation-delay: 0.3s;
-                animation-delay: 0.3s;
-    }
-    .sk-folding-cube .sk-cube3:before {
-        -webkit-animation-delay: 0.6s;
-                animation-delay: 0.6s; 
-    }
-    .sk-folding-cube .sk-cube4:before {
-        -webkit-animation-delay: 0.9s;
-                animation-delay: 0.9s;
-    }
-    @-webkit-keyframes sk-foldCubeAngle {
-        0%, 10% {
-            -webkit-transform: perspective(140px) rotateX(-180deg);
-                    transform: perspective(140px) rotateX(-180deg);
-            opacity: 0; 
-        } 25%, 75% {
-            -webkit-transform: perspective(140px) rotateX(0deg);
-                    transform: perspective(140px) rotateX(0deg);
-            opacity: 1; 
-        } 90%, 100% {
-            -webkit-transform: perspective(140px) rotateY(180deg);
-                    transform: perspective(140px) rotateY(180deg);
-            opacity: 0; 
-        } 
+        margin-top: 10px;
     }
 
-    @keyframes sk-foldCubeAngle {
-        0%, 10% {
-            -webkit-transform: perspective(140px) rotateX(-180deg);
-                    transform: perspective(140px) rotateX(-180deg);
-            opacity: 0; 
-        } 25%, 75% {
-            -webkit-transform: perspective(140px) rotateX(0deg);
-                    transform: perspective(140px) rotateX(0deg);
-            opacity: 1; 
-        } 90%, 100% {
-            -webkit-transform: perspective(140px) rotateY(180deg);
-                    transform: perspective(140px) rotateY(180deg);
-            opacity: 0; 
-        }
+    .chat-card {
+        height: auto;
     }
-    .blur-page {
-        margin-top: -10px;
-        height: 100%;
-        width: 99%;
-        background-color: rgba(255, 255, 255, 0.729);
-        position: absolute;
-    }
-    .profile {
-        display: none;
-        width: 100%;
-        background-color: #ffffffed;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-    }
-    .profile-close {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    .cl-ic {
-        font-size: 27px;
-        color: #d4d2d2;
-    }
-    .date-con {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: gray;
-        font-size: 13px;
-        margin-bottom: 10px;
-    }
+}
+
 </style>
 <body>
-    
+<div class="container-fluid">
     <div class="blur-page" id="b-page">
         x
         <div class="sk-folding-cube">
@@ -359,6 +385,8 @@
             </div>
         </div>
     </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

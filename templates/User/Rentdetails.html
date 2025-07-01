@@ -170,17 +170,18 @@
         .hero-section {
   position: relative;
   text-align: relative;
-  background-image: url('{{ data.gallery_file.url }}'), linear-gradient(to bottom, #CAD1E4, #CAD1E4 1000%) ;
+  background-image: url('{{ data.gallery_file.url }}'), linear-gradient(to bottom, #CAD1E4, #CAD1E4 100%) ;
   background-blend-mode: luminosity;
-  background-size: max(50%, 100%);
-  background-repeat: no-repeat;
-    background-position: center;
+  background-size: max(100%, 100%);
+  background-repeat:no-repeat;
+  background-position:top;
   
   color: white;
-  height: 400px; /* Adjust height as needed */
+  height: 350px; /* Adjust height as needed */
   z-index: -1;
   backdrop-filter: blur(5px);
   background-attachment: fixed;
+  margin-top: 1px;
   
 }
 .hero-section::after {
@@ -240,8 +241,11 @@ height: auto;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
-<a id="back-button" class="back-button">&#x2B05; Back</a>
-<section class="hero-section parallax">
+
+
+<body>
+    <a id="back-button" class="back-button">&#x2B05; Back</a>
+    <section class="hero-section parallax">
 
       
     
@@ -254,9 +258,6 @@ height: auto;
       
     </div>
   </section>
-<body>
-    
-    
         <!-- Main Section -->
         <main class="renttool my-md">
           <div class="container">

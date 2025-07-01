@@ -18,7 +18,7 @@ import math
 import os
 
 def get_location_name(latitude, longitude):
-    geolocator = Nominatim(user_agent="ToolShareApp", timeout=12)
+    geolocator = Nominatim(user_agent="ToolShareApp", timeout=100)
     location = geolocator.reverse((latitude, longitude), exactly_one=True)
     return location.address
 
